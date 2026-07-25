@@ -41,7 +41,7 @@ function About() {
   return () => mm.revert()
 }, [])
   return (
-    <section ref={sectionRef} className="relative h-full min-h-100 lg:min-h-screen overflow-hidden">
+    <section ref={sectionRef} className="relative h-full min-h-100 lg:min-h-screen overflow-hidden lg:rounded-3xl">
       <img
         ref={imageRef}
         src={`${import.meta.env.BASE_URL}me.png`}

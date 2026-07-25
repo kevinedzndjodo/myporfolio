@@ -1,12 +1,17 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { projects } from '../../data/projects'
+import { api, type Project } from '../../lib/api'
 
 gsap.registerPlugin(ScrollTrigger)
 
 function Projects() {
     const containerRef = useRef<HTMLDivElement>(null)
+    const [projects, setProjects] = useState<Project[]>([])
+
+    useEffect(() => {
+      api.projects.list().then(setProjects).catch(console.error)
+    }, [])
 
     useEffect(() => {
         const cards = containerRef.current?.querySelectorAll('.project-card')
@@ -46,7 +51,7 @@ function Projects() {
                 }
             )
         })
-    }, [])
+    }, [projects])
 
     return (
         <section id="projects" ref={containerRef} className="px-4 md:px-16 py-16 md:py-24 bg-background">
@@ -61,7 +66,7 @@ function Projects() {
             <div className="flex flex-col gap-6 md:gap-8">
                 {projects.map((project) => (
 
-                    <a key={project.name}
+                    <a key={project.id}
                         href={project.url}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -76,13 +81,30 @@ function Projects() {
                         </div>
 
                         <div className="project-content w-full md:w-1/2">
-                            <h3 className="text-xl md:text-2xl font-semibold text-text group-hover:text-accent transition">
-                                {project.name}
-                            </h3>
+                            <div className="flex items-center gap-3">
+                              <h3 className="text-xl md:text-2xl font-semibold text-text group-hover:text-accent transition">
+                                  {project.name}
+                              </h3>
+                              {project.year && <span className="text-xs text-muted">{project.year}</span>}
+                            </div>
 
                             <p className="text-muted text-sm md:text-base mt-3">
                                 {project.description}
                             </p>
+
+                            {project.challenges && (
+                              <div className="mt-4">
+                                <p className="text-xs text-accent font-medium uppercase tracking-wider">Challenges</p>
+                                <p className="text-muted text-sm mt-1">{project.challenges}</p>
+                              </div>
+                            )}
+
+                            {project.outcome && (
+                              <div className="mt-3">
+                                <p className="text-xs text-accent font-medium uppercase tracking-wider">Outcome</p>
+                                <p className="text-muted text-sm mt-1">{project.outcome}</p>
+                              </div>
+                            )}
 
                             <div className="flex flex-wrap gap-2 mt-4">
                                 {project.tech.map((tech) => (

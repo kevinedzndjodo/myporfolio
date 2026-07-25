@@ -1,11 +1,17 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
-import { skills } from '../../data/skills'
+import { api, type Skill as SkillType } from '../../lib/api'
+import { getIcon } from '../../lib/icons'
 import Clock from './ui/Clock'
 
 function Skills() {
+  const [skills, setSkills] = useState<SkillType[]>([])
   const trackRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<gsap.core.Tween | null>(null)
+
+  useEffect(() => {
+    api.skills.list().then(setSkills).catch(console.error)
+  }, [])
 
   useEffect(() => {
     const track = trackRef.current
@@ -21,7 +27,7 @@ function Skills() {
     return () => {
       animationRef.current?.kill()
     }
-  }, [])
+  }, [skills])
 
   const handleMouseEnter = () => {
     animationRef.current?.pause()
@@ -43,13 +49,13 @@ function Skills() {
           className="flex w-max gap-3"
         >
           {[...skills, ...skills].map((skill, index) => {
-            const Icon = skill.icon
+            const Icon = getIcon(skill.icon)
             return (
               <span
-                key={index}
+                key={`${skill.id}-${index}`}
                 className="flex items-center gap-2 border border-border text-text text-xs md:text-sm px-2.5 py-1 md:px-3 md:py-1.5 rounded-full whitespace-nowrap hover:bg-accent hover:text-background hover:border-accent transition"
               >
-                <Icon />
+                {Icon && <Icon />}
                 {skill.name}
               </span>
             )

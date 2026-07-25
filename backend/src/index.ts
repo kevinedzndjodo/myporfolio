@@ -1,0 +1,56 @@
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
+import { config } from './config.js'
+import authRoutes from './routes/auth.js'
+import projectRoutes from './routes/projects.js'
+import faqRoutes from './routes/faq.js'
+import skillRoutes from './routes/skills.js'
+import contactRoutes from './routes/contact.js'
+import messageRoutes from './routes/messages.js'
+
+const app = express()
+
+app.use(helmet())
+app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }))
+app.use(express.json({ limit: '10kb' }))
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+app.use('/api/', limiter)
+
+const contactLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: { error: 'Too many messages. Try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+app.use('/api/contact', contactLimiter)
+
+app.use('/api/auth', authRoutes)
+app.use('/api/projects', projectRoutes)
+app.use('/api/faq', faqRoutes)
+app.use('/api/skills', skillRoutes)
+app.use('/api/contact', contactRoutes)
+app.use('/api/messages', messageRoutes)
+
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok' })
+})
+
+app.use((_req, res) => {
+  res.status(404).json({ error: 'Not found' })
+})
+
+app.listen(config.PORT, () => {
+  console.log(`Server running on http://localhost:${config.PORT}`)
+})
+
+export default app

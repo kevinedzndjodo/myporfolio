@@ -1,8 +1,13 @@
-import { useState } from 'react'
-import { faqItems } from '../../data/faq'
+import { useState, useEffect } from 'react'
+import { api, type FaqItem as FaqItemType } from '../../lib/api'
 
 function Faq() {
+  const [items, setItems] = useState<FaqItemType[]>([])
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+
+  useEffect(() => {
+    api.faq.list().then(setItems).catch(console.error)
+  }, [])
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
@@ -15,11 +20,11 @@ function Faq() {
       </h2>
 
       <div className="flex flex-col divide-y divide-border border-t border-b border-border">
-        {faqItems.map((item, index) => {
+        {items.map((item, index) => {
           const isOpen = openIndex === index
 
           return (
-            <div key={item.question}>
+            <div key={item.id}>
               <button
                 onClick={() => toggle(index)}
                 className="w-full flex items-center justify-between py-5 text-left"

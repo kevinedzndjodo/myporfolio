@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useTheme } from '../../context/ThemeContext'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -9,14 +10,21 @@ const strategyText =
 
 function Strategy() {
   const containerRef = useRef<HTMLParagraphElement>(null)
+  const tlRef = useRef<gsap.core.Tween | null>(null)
+  const { theme } = useTheme()
 
   useEffect(() => {
     if (!containerRef.current) return
 
+    tlRef.current?.kill()
+    ScrollTrigger.getAll().forEach(st => {
+      if (st.vars.trigger === containerRef.current) st.kill()
+    })
+
     const words = containerRef.current.querySelectorAll('.word')
     const textColor = getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim()
 
-    gsap.to(words, {
+    tlRef.current = gsap.to(words, {
       color: textColor,
       stagger: 0.05,
       scrollTrigger: {
@@ -26,7 +34,11 @@ function Strategy() {
         scrub: 1,
       },
     })
-  }, [])
+
+    return () => {
+      tlRef.current?.kill()
+    }
+  }, [theme])
 
   return (
     <section id="strategy" className="px-4 md:px-16 py-16 md:py-24 bg-background">

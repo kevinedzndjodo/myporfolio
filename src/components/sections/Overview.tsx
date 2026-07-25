@@ -13,7 +13,7 @@ function Overview() {
         </p>
 
         <div className="mt-6 md:mt-8">
-          <Button href="mailto:kevinedza@gmail.com">Say hello</Button>
+          <Button href="#contact">Say hello</Button>
         </div>
       </div>
     </section>

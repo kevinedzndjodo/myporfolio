@@ -1,10 +1,10 @@
-import { Home, User, FolderOpen, HelpCircle } from 'lucide-react'
+import { Home, User, FolderOpen, Mail } from 'lucide-react'
 
 const navItems = [
   { href: '#home', label: 'Home', icon: Home },
   { href: '#overview', label: 'About', icon: User },
   { href: '#projects', label: 'Projects', icon: FolderOpen },
-  { href: '#faq', label: 'FAQ', icon: HelpCircle },
+  { href: '#contact', label: 'Contact', icon: Mail },
 ]
 
 function BottomNav() {
