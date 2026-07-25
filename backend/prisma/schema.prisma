@@ -40,6 +40,11 @@ model Skill {
   icon String
 }
 
+model Setting {
+  key   String @id
+  value String
+}
+
 model ContactMessage {
   id        Int      @id @default(autoincrement())
   name      String

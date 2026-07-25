@@ -10,12 +10,15 @@ import faqRoutes from './routes/faq.js'
 import skillRoutes from './routes/skills.js'
 import contactRoutes from './routes/contact.js'
 import messageRoutes from './routes/messages.js'
+import uploadRoutes from './routes/upload.js'
+import settingsRoutes from './routes/settings.js'
 
 const app = express()
 
-app.use(helmet())
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
 app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }))
 app.use(express.json({ limit: '10kb' }))
+app.use('/uploads', express.static('uploads'))
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -40,6 +43,8 @@ app.use('/api/faq', faqRoutes)
 app.use('/api/skills', skillRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/messages', messageRoutes)
+app.use('/api/upload', uploadRoutes)
+app.use('/api/settings', settingsRoutes)
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })

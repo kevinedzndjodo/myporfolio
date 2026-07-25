@@ -5,6 +5,8 @@ import { api, type Project } from '../../lib/api'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:4000'
+
 function Projects() {
     const containerRef = useRef<HTMLDivElement>(null)
     const [projects, setProjects] = useState<Project[]>([])
@@ -74,7 +76,7 @@ function Projects() {
                     >
                         <div className="project-image w-full md:w-1/2 overflow-hidden rounded-xl">
                             <img
-                                src={`${import.meta.env.BASE_URL}projects/${project.image}`}
+                                src={project.image.startsWith('/uploads/') ? `${API_BASE}${project.image}` : `${import.meta.env.BASE_URL}projects/${project.image}`}
                                 alt={project.name}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />

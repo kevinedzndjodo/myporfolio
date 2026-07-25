@@ -29,7 +29,23 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return data as T
 }
 
+async function uploadFile(file: File): Promise<string> {
+  const token = localStorage.getItem('admin_token')
+  const formData = new FormData()
+  formData.append('file', file)
+  const headers: Record<string, string> = {}
+  if (token) headers['Authorization'] = `Bearer ${token}`
+  const res = await fetch(`${API}/upload`, { method: 'POST', body: formData, headers })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new ApiError(data.error || 'Upload failed', res.status)
+  }
+  const data = await res.json()
+  return data.url as string
+}
+
 export const api = {
+  upload: uploadFile,
   projects: {
     list: () => request<Project[]>('/projects'),
     create: (data: ProjectInput) => request<Project>('/projects', { method: 'POST', body: JSON.stringify(data) }),
@@ -51,6 +67,10 @@ export const api = {
   messages: {
     list: () => request<Message[]>('/messages'),
     delete: (id: number) => request<void>(`/messages/${id}`, { method: 'DELETE' }),
+  },
+  settings: {
+    get: () => request<Record<string, string>>('/settings'),
+    update: (data: Record<string, string>) => request<Record<string, string>>('/settings', { method: 'PUT', body: JSON.stringify(data) }),
   },
   contact: (data: { name: string; email: string; message: string }) =>
     request<{ id: number }>('/contact', { method: 'POST', body: JSON.stringify(data) }),

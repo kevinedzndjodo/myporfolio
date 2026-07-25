@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
-import { LogOut, FolderOpen, HelpCircle, Code, Mail } from 'lucide-react'
+import { LogOut, FolderOpen, HelpCircle, Code, Mail, Settings } from 'lucide-react'
 import ProjectsManager from '../components/admin/ProjectsManager'
 import FaqManager from '../components/admin/FaqManager'
 import SkillsManager from '../components/admin/SkillsManager'
 import MessagesManager from '../components/admin/MessagesManager'
+import SettingsManager from '../components/admin/SettingsManager'
 
-type Tab = 'projects' | 'faq' | 'skills' | 'messages'
+type Tab = 'projects' | 'faq' | 'skills' | 'messages' | 'settings'
 
 const tabs: { key: Tab; label: string; icon: React.ElementType }[] = [
   { key: 'projects', label: 'Projects', icon: FolderOpen },
   { key: 'faq', label: 'FAQ', icon: HelpCircle },
   { key: 'skills', label: 'Skills', icon: Code },
   { key: 'messages', label: 'Messages', icon: Mail },
+  { key: 'settings', label: 'Settings', icon: Settings },
 ]
 
 function AdminDashboard() {
@@ -68,6 +70,7 @@ function AdminDashboard() {
         {activeTab === 'faq' && <FaqManager />}
         {activeTab === 'skills' && <SkillsManager />}
         {activeTab === 'messages' && <MessagesManager />}
+        {activeTab === 'settings' && <SettingsManager />}
       </div>
     </div>
   )

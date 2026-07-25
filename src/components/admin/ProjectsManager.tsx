@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { api, type Project, type ProjectInput } from '../../lib/api'
-import { Plus, Pencil, Trash2, X } from 'lucide-react'
+import { Plus, Pencil, Trash2, X, ImageUp } from 'lucide-react'
 
 const defaultForm: ProjectInput = {
   name: '', description: '', challenges: '', outcome: '', year: null, tech: [], url: '', image: '',
@@ -13,6 +13,7 @@ function ProjectsManager() {
   const [editing, setEditing] = useState<Project | null>(null)
   const [form, setForm] = useState<ProjectInput>(defaultForm)
   const [techInput, setTechInput] = useState('')
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => { load() }, [])
 
@@ -116,8 +117,31 @@ function ProjectsManager() {
                   <input value={form.url} onChange={e => setForm({ ...form, url: e.target.value })} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text text-sm" required />
                 </div>
                 <div>
-                  <label className="text-sm text-muted mb-1 block">Image path</label>
-                  <input value={form.image} onChange={e => setForm({ ...form, image: e.target.value })} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text text-sm" required />
+                  <label className="text-sm text-muted mb-1 block">Image</label>
+                  <div className="flex items-start gap-3">
+                    {form.image && (
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-background border border-border shrink-0">
+                        <img src={form.image.startsWith('/uploads/') ? `http://localhost:4000${form.image}` : `${import.meta.env.BASE_URL}projects/${form.image}`} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <label className="cursor-pointer inline-flex items-center gap-2 bg-accent text-background px-3 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition">
+                        <ImageUp size={14} />
+                        {uploading ? 'Uploading...' : 'Upload'}
+                        <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                          const file = e.target.files?.[0]
+                          if (!file) return
+                          setUploading(true)
+                          try {
+                            const url = await api.upload(file)
+                            setForm({ ...form, image: url })
+                          } catch {}
+                          setUploading(false)
+                        }} />
+                      </label>
+                      <p className="text-xs text-muted mt-1">{form.image || 'No image'}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 

@@ -16,6 +16,18 @@ async function main() {
   })
   console.log('Admin user created:', email)
 
+  // Settings
+  const existingSettings = await prisma.setting.count()
+  if (existingSettings === 0) {
+    await prisma.setting.createMany({
+      data: [
+        { key: 'about_image', value: '/me.png' },
+        { key: 'site_title', value: 'Kevin Edza — Frontend Developer' },
+      ],
+    })
+    console.log('Seeded settings')
+  }
+
   // Projects
   const existingProjects = await prisma.project.count()
   if (existingProjects === 0) {
