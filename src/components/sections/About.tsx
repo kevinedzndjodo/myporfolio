@@ -46,11 +46,11 @@ function About() {
         ref={imageRef}
         src="/me.png"
         alt="Kevin, frontend developer"
-        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-[filter] duration-500"
+        className="w-full h-full object-contain grayscale hover:grayscale-0 transition-[filter] duration-500"
       />
 
-      <div className="lg:hidden absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-background via-background/80 to-transparent">
-        <h2 className="text-xl md:text-2xl font-semibold text-text leading-snug">
+      <div className="lg:hidden absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-linear-to-t from-background via-background/80 to-transparent">
+        <h2 className="text-lg md:text-2xl font-semibold text-text leading-snug">
           Hi, I'm Kevin — a frontend developer based in Yaoundé, Cameroon.
         </h2>
 

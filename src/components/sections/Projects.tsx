@@ -65,7 +65,7 @@ function Projects() {
                         href={project.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="project-card group flex flex-col md:flex-row items-center gap-6 md:gap-10 bg-surface rounded-2xl p-6 md:p-10 hover:bg-[#242424] transition"
+                        className="project-card group flex flex-col md:flex-row items-center gap-6 md:gap-10 bg-surface rounded-2xl p-4 md:p-10 hover:bg-border/30 transition"
                     >
                         <div className="project-image w-full md:w-1/2 overflow-hidden rounded-xl">
                             <img

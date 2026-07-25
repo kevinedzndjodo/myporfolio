@@ -47,7 +47,7 @@ function Skills() {
             return (
               <span
                 key={index}
-                className="flex items-center gap-2 border border-border text-text text-xs md:text-sm px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-accent hover:text-background hover:border-accent transition"
+                className="flex items-center gap-2 border border-border text-text text-xs md:text-sm px-2.5 py-1 md:px-3 md:py-1.5 rounded-full whitespace-nowrap hover:bg-accent hover:text-background hover:border-accent transition"
               >
                 <Icon />
                 {skill.name}
