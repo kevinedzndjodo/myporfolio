@@ -19,40 +19,44 @@ function Projects() {
         const cards = containerRef.current?.querySelectorAll('.project-card')
         if (!cards) return
 
-        cards.forEach((card) => {
-            const image = card.querySelector('.project-image')
-            const content = card.querySelector('.project-content')
+        const ctx = gsap.context(() => {
+            cards.forEach((card) => {
+                const image = card.querySelector('.project-image')
+                const content = card.querySelector('.project-content')
 
-            gsap.fromTo(
-                image,
-                { clipPath: 'inset(100% 0% 0% 0%)' },
-                {
-                    clipPath: 'inset(0% 0% 0% 0%)',
-                    duration: 1.5,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 80%',
-                    },
-                }
-            )
+                gsap.fromTo(
+                    image,
+                    { clipPath: 'inset(100% 0% 0% 0%)' },
+                    {
+                        clipPath: 'inset(0% 0% 0% 0%)',
+                        duration: 1.5,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 80%',
+                        },
+                    }
+                )
 
-            gsap.fromTo(
-                content,
-                { y: 30, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 2.3,
-                    delay: 0.7,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 80%',
-                    },
-                }
-            )
-        })
+                gsap.fromTo(
+                    content,
+                    { y: 30, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 2.3,
+                        delay: 0.7,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 80%',
+                        },
+                    }
+                )
+            })
+        }, containerRef)
+
+        return () => ctx.revert()
     }, [projects])
 
     return (

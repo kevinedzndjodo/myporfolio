@@ -15,29 +15,21 @@ function Strategy() {
 
   useEffect(() => {
     if (!containerRef.current) return
-
-    tlRef.current?.kill()
-    ScrollTrigger.getAll().forEach(st => {
-      if (st.vars.trigger === containerRef.current) st.kill()
-    })
-
-    const words = containerRef.current.querySelectorAll('.word')
-    const textColor = getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim()
-
-    tlRef.current = gsap.to(words, {
-      color: textColor,
-      stagger: 0.05,
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top 70%',
-        end: 'bottom 40%',
-        scrub: 1,
-      },
-    })
-
-    return () => {
-      tlRef.current?.kill()
-    }
+    const ctx = gsap.context(() => {
+      const words = containerRef.current!.querySelectorAll('.word')
+      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim()
+      tlRef.current = gsap.to(words, {
+        color: textColor,
+        stagger: 0.05,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 70%',
+          end: 'bottom 40%',
+          scrub: 1,
+        },
+      })
+    }, containerRef)
+    return () => { ctx.revert(); tlRef.current = null }
   }, [theme])
 
   return (

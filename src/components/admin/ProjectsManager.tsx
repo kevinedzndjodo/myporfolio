@@ -6,6 +6,8 @@ const defaultForm: ProjectInput = {
   name: '', description: '', challenges: '', outcome: '', year: null, tech: [], url: '', image: '',
 }
 
+const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:4000'
+
 function ProjectsManager() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
@@ -121,7 +123,7 @@ function ProjectsManager() {
                   <div className="flex items-start gap-3">
                     {form.image && (
                       <div className="w-16 h-16 rounded-lg overflow-hidden bg-background border border-border shrink-0">
-                        <img src={form.image.startsWith('/uploads/') ? `http://localhost:4000${form.image}` : `${import.meta.env.BASE_URL}projects/${form.image}`} alt="" className="w-full h-full object-cover" />
+                        <img src={form.image.startsWith('/uploads/') ? `${API_BASE}${form.image}` : `${import.meta.env.BASE_URL}projects/${form.image}`} alt="" className="w-full h-full object-cover" />
                       </div>
                     )}
                     <div className="flex-1">
@@ -135,7 +137,7 @@ function ProjectsManager() {
                           try {
                             const url = await api.upload(file)
                             setForm({ ...form, image: url })
-                          } catch {}
+                          } catch (e) { console.error(e) }
                           setUploading(false)
                         }} />
                       </label>
