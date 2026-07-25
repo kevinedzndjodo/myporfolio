@@ -57,11 +57,11 @@ function Hero() {
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted text-xs md:text-base">
                         <span>Find me at</span>
-                        <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-text hover:text-accent transition">
+                        <a href="https://github.com/kevinedzndjodo" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-text hover:text-accent transition">
                             <FontAwesomeIcon icon={faGithub} />
                             GitHub
                         </a>
-                        <a href="https://linkedin.com/in/your-username" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-text hover:text-accent transition">
+                        <a href="https://linkedin.com/in/kevinndjodo" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-text hover:text-accent transition">
                             <FontAwesomeIcon icon={faLinkedin} />
                             LinkedIn
                         </a>

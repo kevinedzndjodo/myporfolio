@@ -1,9 +1,12 @@
 import 'dotenv/config'
+import fs from 'fs'
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import { config } from './config.js'
+
+fs.mkdirSync('uploads', { recursive: true })
 import authRoutes from './routes/auth.js'
 import projectRoutes from './routes/projects.js'
 import faqRoutes from './routes/faq.js'

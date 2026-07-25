@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: myporfolio-backend
+    runtime: node
+    repo: https://github.com/kevinedzndjodo/myporfolio
+    branch: main
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npx prisma db push --accept-data-loss && npm run db:seed
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_EMAIL
+        value: kevinedza@gmail.com
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://kevinedzndjodo.github.io
