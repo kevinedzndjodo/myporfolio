@@ -12,7 +12,7 @@ export const projects: Project[] = [
     description: 'A subscription reselling platform for digital services like Netflix and Spotify.',
     tech: ['React', 'Node.js', 'PostgreSQL', 'Tailwind'],
     url: 'https://streamly-frontend-three.vercel.app/',
-    image: '/projects/project-streamly.png',
+    image: 'project-streamly.png',
   },
   
 ]

@@ -69,7 +69,7 @@ function Projects() {
                     >
                         <div className="project-image w-full md:w-1/2 overflow-hidden rounded-xl">
                             <img
-                                src={project.image}
+                                src={`${import.meta.env.BASE_URL}projects/${project.image}`}
                                 alt={project.name}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />

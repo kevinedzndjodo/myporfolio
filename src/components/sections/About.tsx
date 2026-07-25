@@ -44,7 +44,7 @@ function About() {
     <section ref={sectionRef} className="relative h-full min-h-100 lg:min-h-screen overflow-hidden">
       <img
         ref={imageRef}
-        src="/me.png"
+        src={`${import.meta.env.BASE_URL}me.png`}
         alt="Kevin, frontend developer"
         className="w-full h-full object-contain grayscale hover:grayscale-0 transition-[filter] duration-500"
       />
