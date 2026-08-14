@@ -12,11 +12,67 @@ const PROJECTS = [
       'Building a secure end-to-end payment flow with CinetPay (MTN & Orange Mobile Money), implementing subscription assignment from a shared account pool, and a job queue to auto-detect and re-provision failed accounts.',
     outcome:
       'Launched a production platform with user auth, order management, an admin dashboard with statistics, subscription renewals, and automated account-pool provisioning.',
-    year: 2024,
+    year: 2026,
     tech: ['React', 'Node.js', 'PostgreSQL', 'Tailwind', 'Express'],
     url: 'https://streamly-frontend-three.vercel.app/',
     image: 'project-streamly.png',
     github: 'https://github.com/kevinedzndjodo/streamly',
+  },
+  {
+    name: 'Shop Marketplace',
+    description:
+      'A marketplace for used clothing in Yaoundé where sellers list products with WhatsApp checkout, a category filter, search, seller profiles and a product detail page.',
+    challenges:
+      'Handling React Router navigation across four pages, structuring seller and product data in localStorage, and wiring WhatsApp links that pre-fill a French purchase message.',
+    outcome:
+      'A multi-page React app with search, category filtering, seller cards with ratings, and a post-product flow. Deployed live on GitHub Pages.',
+    year: 2026,
+    tech: ['React', 'Vite', 'Tailwind', 'React Router'],
+    url: 'https://kevinedzndjodo.github.io/e-commerce-goodclothes/',
+    image: 'shop-marketplace.png',
+    github: 'https://github.com/kevinedzndjodo/e-commerce-goodclothes',
+  },
+  {
+    name: 'Expense Tracker',
+    description:
+      'A React expense tracker where you add and delete transactions, see a running balance, and get separate income and expense totals — using the Context API and a useReducer.',
+    challenges:
+      'Organising shared state with a reducer, keeping the balance and income/expense totals in sync after every add or delete, and a clean minimal UI.',
+    outcome:
+      'A classic budgeting dashboard with live balance updates, deployed live on GitHub Pages.',
+    year: 2026,
+    tech: ['React', 'Context API', 'Tailwind'],
+    url: 'https://kevinedzndjodo.github.io/expense-tracker/',
+    image: 'expense-tracker.png',
+    github: 'https://github.com/kevinedzndjodo/expense-tracker',
+  },
+  {
+    name: 'Todo App (Vue 3)',
+    description:
+      'A first Vue 3 project that starts with a reusable ToDoItem component: a checkbox with a label prop, styled as a clean single-item todo list.',
+    challenges:
+      'Getting familiar with Vue single-file components, the script/template split, and props-based behaviour in a minimal setup.',
+    outcome:
+      'A working Vue 3 app showcasing component composition, deployed live on GitHub Pages.',
+    year: 2026,
+    tech: ['Vue 3', 'Vite', 'JavaScript'],
+    url: 'https://kevinedzndjodo.github.io/todo-vue/',
+    image: 'todo-vue.png',
+    github: 'https://github.com/kevinedzndjodo/todo-vue',
+  },
+  {
+    name: 'Simple Calculator',
+    description:
+      'A dependency-free calculator with basic arithmetic, clear controls and a live display — the opening project of the 30-days-30-projects challenge.',
+    challenges:
+      'Keeping the display accurate through chained operations without a framework, and making the buttons feel responsive.',
+    outcome:
+      'A zero-dependency day-01 project, completing the 30-days set alongside the color generator, digital clock and counter apps.',
+    year: 2026,
+    tech: ['HTML', 'CSS', 'JavaScript'],
+    url: 'https://kevinedzndjodo.github.io/30days30projects/day-01-calculator/',
+    image: 'day-01-calculator.png',
+    github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
   {
     name: 'Color Palette Generator',
@@ -26,9 +82,9 @@ const PROJECTS = [
     outcome: 'A zero-dependency tool that generates and copies accessible palettes in a single tap.',
     year: 2026,
     tech: ['HTML', 'CSS', 'JavaScript'],
-    url: 'https://kevinedzndjodo.github.io/30-days-30-projects/day-02-color-generator/',
+    url: 'https://kevinedzndjodo.github.io/30days30projects/day-02-color-generator/',
     image: 'day-02-color-generator.png',
-    github: 'https://github.com/kevinedzndjodo/30-days-30-projects',
+    github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
   {
     name: 'Digital Clock',
@@ -38,9 +94,9 @@ const PROJECTS = [
     outcome: 'A dependency-free clock that stays perfectly in sync and degrades gracefully.',
     year: 2026,
     tech: ['HTML', 'CSS', 'JavaScript'],
-    url: 'https://kevinedzndjodo.github.io/30-days-30-projects/day-03-digital-clock/',
+    url: 'https://kevinedzndjodo.github.io/30days30projects/day-03-digital-clock/',
     image: 'day-03-digital-clock.png',
-    github: 'https://github.com/kevinedzndjodo/30-days-30-projects',
+    github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
   {
     name: 'Counter App',
@@ -50,9 +106,9 @@ const PROJECTS = [
     outcome: 'A clean, accessible counter with clear visual feedback on every interaction.',
     year: 2026,
     tech: ['HTML', 'CSS', 'JavaScript'],
-    url: 'https://kevinedzndjodo.github.io/30-days-30-projects/day-04-counter-app/',
+    url: 'https://kevinedzndjodo.github.io/30days30projects/day-04-counter-app/',
     image: 'day-04-counter-app.png',
-    github: 'https://github.com/kevinedzndjodo/30-days-30-projects',
+    github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
 ]
 
