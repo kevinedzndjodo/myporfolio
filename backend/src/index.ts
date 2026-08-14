@@ -18,8 +18,22 @@ import settingsRoutes from './routes/settings.js'
 
 const app = express()
 
-app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }))
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'blob:'],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        fontSrc: ["'self'", 'data:'],
+      },
+    },
+  })
+)
+const corsOrigin = process.env.CORS_ORIGIN
+app.use(cors({ origin: corsOrigin ? corsOrigin.split(',').map((s) => s.trim()) : 'http://localhost:5173' }))
 app.use(express.json({ limit: '10kb' }))
 app.use('/uploads', express.static('uploads'))
 

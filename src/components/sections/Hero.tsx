@@ -1,7 +1,6 @@
 import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
+import { FaGithub, FaLinkedin } from 'react-icons/fa'
 
 function Hero() {
     const contentRef = useRef<HTMLDivElement>(null)
@@ -11,6 +10,7 @@ function Hero() {
 
         mm.add('(min-width: 1024px)', () => {
             if (!contentRef.current) return
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
             gsap.fromTo(
                 contentRef.current,
@@ -34,6 +34,7 @@ function Hero() {
                 </div>
 
                 <div className="flex flex-col justify-center flex-1">
+                    <p className="text-sm md:text-base font-medium text-accent mb-3">Kevin Edza — Frontend Developer</p>
                     <h1 className="text-3xl md:text-6xl font-semibold text-text max-w-3xl leading-tight">
                         Crafted experiences, designed to be beautiful and built to last.
                     </h1>
@@ -58,14 +59,14 @@ function Hero() {
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted text-xs md:text-base">
                         <span>Find me at</span>
                         <a href="https://github.com/kevinedzndjodo" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-text hover:text-accent transition">
-                            <FontAwesomeIcon icon={faGithub} />
+                            <FaGithub size={16} />
                             GitHub
                         </a>
                         <a href="https://linkedin.com/in/kevinndjodo" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-text hover:text-accent transition">
-                            <FontAwesomeIcon icon={faLinkedin} />
+                            <FaLinkedin size={16} />
                             LinkedIn
                         </a>
-                        <a href={`${import.meta.env.BASE_URL}Edza_Ndjodo_Kevin_FRONTEND_Resume.pdf`} download="Kevin-Resume.pdf" className="text-text hover:text-accent transition underline underline-offset-4">
+                        <a href={`${import.meta.env.BASE_URL}Kevin_Edza_Resume.pdf`} download="Kevin-Edza-Resume.pdf" className="text-text hover:text-accent transition underline underline-offset-4">
                             Download my resume (PDF)
                         </a>
                     </div>

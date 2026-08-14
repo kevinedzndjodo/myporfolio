@@ -5,15 +5,18 @@ import { Trash2 } from 'lucide-react'
 function MessagesManager() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
+  const [reloadKey, setReloadKey] = useState(0)
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    let ignore = false
+    api.messages.list()
+      .then(data => { if (!ignore) setMessages(data) })
+      .catch((e) => { console.error(e) })
+      .finally(() => { if (!ignore) setLoading(false) })
+    return () => { ignore = true }
+  }, [reloadKey])
 
-  const load = async () => {
-    setLoading(true)
-    try { setMessages(await api.messages.list()) }
-    catch (e) { console.error(e) }
-    finally { setLoading(false) }
-  }
+  const load = () => setReloadKey(k => k + 1)
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this message?')) return

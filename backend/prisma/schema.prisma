@@ -16,7 +16,7 @@ model User {
 
 model Project {
   id          Int      @id @default(autoincrement())
-  name        String
+  name        String   @unique
   description String
   challenges  String?
   outcome     String?
@@ -24,6 +24,7 @@ model Project {
   tech        String   // JSON array stored as string
   url         String
   image       String
+  github      String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

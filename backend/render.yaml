@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: myporfolio-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: myporfolio-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        value: https://kevinedzndjodo.github.io
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: CONTACT_EMAIL
+        sync: false
+
+databases:
+  - name: myporfolio-db
+    plan: free
+    databaseName: myporfolio
+    user: myporfolio

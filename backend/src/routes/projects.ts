@@ -16,11 +16,12 @@ const projectSchema = z.object({
   tech: z.array(z.string()),
   url: z.string().url(),
   image: z.string().min(1),
+  github: z.string().url().optional().nullable(),
 })
 
 type ProjectRow = {
   id: number; name: string; description: string; challenges: string | null; outcome: string | null; year: number | null
-  tech: string; url: string; image: string; createdAt: Date; updatedAt: Date
+  tech: string; url: string; image: string; github: string | null; createdAt: Date; updatedAt: Date
 }
 
 function formatProject(p: ProjectRow) {

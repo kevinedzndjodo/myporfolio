@@ -9,15 +9,17 @@ function SettingsManager() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
 
-  useEffect(() => { load() }, [])
-
-  const load = async () => {
-    try {
-      const s = await api.settings.get()
-      setAboutImage(s.about_image || '')
-      setSiteTitle(s.site_title || '')
-    } catch (e) { console.error(e) }
-  }
+  useEffect(() => {
+    let ignore = false
+    api.settings.get()
+      .then((s) => {
+        if (ignore) return
+        setAboutImage(s.about_image || '')
+        setSiteTitle(s.site_title || '')
+      })
+      .catch((e) => { console.error(e) })
+    return () => { ignore = true }
+  }, [])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -26,7 +28,7 @@ function SettingsManager() {
     try {
       const url = await api.upload(file)
       setAboutImage(url)
-    } catch (err) {
+    } catch {
       setMessage('Upload failed')
     } finally {
       setUploading(false)

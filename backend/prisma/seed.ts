@@ -3,10 +3,72 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
+const PROJECTS = [
+  {
+    name: 'Streamly',
+    description:
+      'A subscription reselling platform where customers buy Netflix, Spotify and other digital subscriptions from a pool of shared accounts, with no-cancellation guarantees.',
+    challenges:
+      'Building a secure end-to-end payment flow with CinetPay (MTN & Orange Mobile Money), implementing subscription assignment from a shared account pool, and a job queue to auto-detect and re-provision failed accounts.',
+    outcome:
+      'Launched a production platform with user auth, order management, an admin dashboard with statistics, subscription renewals, and automated account-pool provisioning.',
+    year: 2024,
+    tech: ['React', 'Node.js', 'PostgreSQL', 'Tailwind', 'Express'],
+    url: 'https://streamly-frontend-three.vercel.app/',
+    image: 'project-streamly.png',
+    github: 'https://github.com/kevinedzndjodo/streamly',
+  },
+  {
+    name: 'Color Palette Generator',
+    description:
+      'A random color palette generator that creates harmonious five-color schemes from a single seed color, with one-click hex copying.',
+    challenges: 'Balancing randomness with harmony so generated palettes are always usable, and keeping the UI snappy with no framework.',
+    outcome: 'A zero-dependency tool that generates and copies accessible palettes in a single tap.',
+    year: 2026,
+    tech: ['HTML', 'CSS', 'JavaScript'],
+    url: 'https://kevinedzndjodo.github.io/30-days-30-projects/day-02-color-generator/',
+    image: 'day-02-color-generator.png',
+    github: 'https://github.com/kevinedzndjodo/30-days-30-projects',
+  },
+  {
+    name: 'Digital Clock',
+    description:
+      'A minimal full-screen digital clock with a 12/24-hour toggle, live seconds, and a date header — built as part of the 30-days-30-projects challenge.',
+    challenges: 'Keeping the font rendering crisp and the update loop efficient without any library.',
+    outcome: 'A dependency-free clock that stays perfectly in sync and degrades gracefully.',
+    year: 2026,
+    tech: ['HTML', 'CSS', 'JavaScript'],
+    url: 'https://kevinedzndjodo.github.io/30-days-30-projects/day-03-digital-clock/',
+    image: 'day-03-digital-clock.png',
+    github: 'https://github.com/kevinedzndjodo/30-days-30-projects',
+  },
+  {
+    name: 'Counter App',
+    description:
+      'A focused counter app with increment, decrement and reset controls plus a live step-size selector — part of the 30-days-30-projects challenge.',
+    challenges: 'Designing controls so the primary action is impossible to miss and state resets are never accidental.',
+    outcome: 'A clean, accessible counter with clear visual feedback on every interaction.',
+    year: 2026,
+    tech: ['HTML', 'CSS', 'JavaScript'],
+    url: 'https://kevinedzndjodo.github.io/30-days-30-projects/day-04-counter-app/',
+    image: 'day-04-counter-app.png',
+    github: 'https://github.com/kevinedzndjodo/30-days-30-projects',
+  },
+]
+
 async function main() {
-  // Admin user
-  const email = process.env.ADMIN_EMAIL || 'admin@example.com'
-  const password = process.env.ADMIN_PASSWORD || 'admin123'
+  // Admin user — never fall back to a known default password
+  const email = process.env.ADMIN_EMAIL
+  const password = process.env.ADMIN_PASSWORD
+  const isProd = process.env.NODE_ENV === 'production'
+
+  if (isProd && (!email || !password)) {
+    throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be set in production. Failing seed instead of using known defaults.')
+  }
+  if (!email || !password) {
+    throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD are required. Refusing to seed with a known default password.')
+  }
+
   const hashed = await bcrypt.hash(password, 12)
 
   await prisma.user.upsert({
@@ -28,22 +90,24 @@ async function main() {
     console.log('Seeded settings')
   }
 
-  // Projects
-  const existingProjects = await prisma.project.count()
-  if (existingProjects === 0) {
-    await prisma.project.create({
-      data: {
-        name: 'Streamly',
-        description: 'A subscription reselling platform for digital services like Netflix and Spotify.',
-        challenges: 'Building a secure payment flow with automatic subscription management and user verification system.',
-        outcome: 'Launched a fully functional platform with Stripe integration, user authentication, and admin dashboard.',
-        year: 2024,
-        tech: JSON.stringify(['React', 'Node.js', 'PostgreSQL', 'Tailwind']),
-        url: 'https://streamly-frontend-three.vercel.app/',
-        image: 'project-streamly.png',
-      },
+  // Projects (upsert by name so new entries appear on existing databases)
+  for (const project of PROJECTS) {
+    const data = {
+      description: project.description,
+      challenges: project.challenges,
+      outcome: project.outcome,
+      year: project.year,
+      tech: JSON.stringify(project.tech),
+      url: project.url,
+      image: project.image,
+      github: project.github,
+    }
+    await prisma.project.upsert({
+      where: { name: project.name },
+      update: data,
+      create: { name: project.name, ...data },
     })
-    console.log('Seeded project: Streamly')
+    console.log('Upserted project:', project.name)
   }
 
   // FAQ
@@ -53,7 +117,7 @@ async function main() {
       data: [
         {
           question: 'What technologies do you work with?',
-          answer: 'React, TypeScript, and Tailwind for the frontend, with Node.js and PostgreSQL when a backend is needed.',
+          answer: 'I build interfaces with React, TypeScript, and Tailwind, and I\'m comfortable with Node.js when a project needs a backend.',
         },
         {
           question: 'Are you available for freelance projects?',
@@ -64,34 +128,35 @@ async function main() {
           answer: 'Yes, I work remotely with clients anywhere, communicating via email or your preferred tool.',
         },
         {
-          question: 'Can i see more of your work?',
-          answer: 'You can explore my recently selected projects in the section above. I do not typically write lengthy case-studies here and prefer to show the work live, in-situ, for you to make your own judgements.\nProjects that have undergone significant change since I last worked on them and most projects in general are not shown. This is so you can be confident that every project displayed here is something I have built myself.\nThis portfolio is only a fraction of all work I have ever done. Most projects are either unable to be shown due to NDA or not visual enough for me to want to display here (think bug-fixing, feature addition or internal projects).',
+          question: 'Can I see more of your work?',
+          answer: 'Everything displayed above is something I built and shipped myself. Beyond this page, I\'m running a 30-days-30-projects challenge where I publish a new small app every day on GitHub — the best way to watch how I work in real time.',
         },
       ],
     })
     console.log('Seeded FAQ items')
   }
 
-  // Skills
-  const existingSkills = await prisma.skill.count()
-  if (existingSkills === 0) {
-    await prisma.skill.createMany({
-      data: [
-        { name: 'HTML', icon: 'FaHtml5' },
-        { name: 'CSS', icon: 'FaCss3Alt' },
-        { name: 'JavaScript', icon: 'FaJs' },
-        { name: 'Vue.js', icon: 'FaVuejs' },
-        { name: 'React', icon: 'FaReact' },
-        { name: 'TypeScript', icon: 'SiTypescript' },
-        { name: 'Tailwind', icon: 'SiTailwindcss' },
-        { name: 'Vite', icon: 'SiVite' },
-        { name: 'GSAP', icon: 'SiGreensock' },
-        { name: 'Git', icon: 'FaGitAlt' },
-        { name: 'Node.js', icon: 'FaNodeJs' },
-      ],
+  // Skills (frontend-focused)
+  const skills = [
+    { name: 'HTML', icon: 'FaHtml5' },
+    { name: 'CSS', icon: 'FaCss3Alt' },
+    { name: 'JavaScript', icon: 'FaJs' },
+    { name: 'React', icon: 'FaReact' },
+    { name: 'TypeScript', icon: 'SiTypescript' },
+    { name: 'Tailwind', icon: 'SiTailwindcss' },
+    { name: 'Vite', icon: 'SiVite' },
+    { name: 'GSAP', icon: 'SiGreensock' },
+    { name: 'Git', icon: 'FaGitAlt' },
+  ]
+
+  for (const skill of skills) {
+    await prisma.skill.upsert({
+      where: { name: skill.name },
+      update: {},
+      create: skill,
     })
-    console.log('Seeded skills')
   }
+  console.log('Upserted skills')
 }
 
 main()

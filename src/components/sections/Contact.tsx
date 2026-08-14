@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { api } from '../../lib/api'
-import { Send, CheckCircle } from 'lucide-react'
+import { Send, CheckCircle, Mail } from 'lucide-react'
+
+const CONTACT_EMAIL = 'kevinndjodo@icloud.com'
 
 function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -30,6 +32,15 @@ function Contact() {
         <p className="text-muted text-sm md:text-base mb-10">
           Have a project in mind? Let's talk about it.
         </p>
+
+        {CONTACT_EMAIL && (
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="inline-flex items-center gap-2 text-accent text-sm font-medium mb-8 hover:underline"
+          >
+            <Mail size={16} /> Prefer email? Write to me directly
+          </a>
+        )}
 
         {done ? (
           <div className="bg-background border border-border rounded-2xl p-8 text-center">

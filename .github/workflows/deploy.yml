@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://localhost:4000/api' }}
+          VITE_API_URL: ${{ vars.VITE_API_URL || secrets.VITE_API_URL || 'https://myporfolio-api.onrender.com/api' }}
 
       - uses: actions/configure-pages@v5
 

@@ -22,8 +22,10 @@ function About() {
   if (!imageRef.current || !sectionRef.current) return
 
   const mm = gsap.matchMedia()
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   mm.add('(min-width: 1024px)', () => {
+    if (reduceMotion) return
     gsap.fromTo(
       imageRef.current,
       { xPercent: 150, opacity: 0 },
@@ -32,6 +34,7 @@ function About() {
   })
 
   mm.add('(max-width: 1023px)', () => {
+    if (reduceMotion) return
     gsap.fromTo(
       imageRef.current,
       { xPercent: -150, opacity: 0 },

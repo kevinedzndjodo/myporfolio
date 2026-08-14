@@ -8,15 +8,18 @@ function SkillsManager() {
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Skill | null>(null)
   const [form, setForm] = useState<SkillInput>({ name: '', icon: '' })
+  const [reloadKey, setReloadKey] = useState(0)
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    let ignore = false
+    api.skills.list()
+      .then(data => { if (!ignore) setSkills(data) })
+      .catch((e) => { console.error(e) })
+      .finally(() => { if (!ignore) setLoading(false) })
+    return () => { ignore = true }
+  }, [reloadKey])
 
-  const load = async () => {
-    setLoading(true)
-    try { setSkills(await api.skills.list()) }
-    catch (e) { console.error(e) }
-    finally { setLoading(false) }
-  }
+  const load = () => setReloadKey(k => k + 1)
 
   const openCreate = () => {
     setEditing(null); setForm({ name: '', icon: '' }); setShowForm(true)

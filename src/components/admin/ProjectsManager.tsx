@@ -3,7 +3,7 @@ import { api, type Project, type ProjectInput } from '../../lib/api'
 import { Plus, Pencil, Trash2, X, ImageUp } from 'lucide-react'
 
 const defaultForm: ProjectInput = {
-  name: '', description: '', challenges: '', outcome: '', year: null, tech: [], url: '', image: '',
+  name: '', description: '', challenges: '', outcome: '', year: null, tech: [], url: '', image: '', github: '',
 }
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:4000'
@@ -16,15 +16,18 @@ function ProjectsManager() {
   const [form, setForm] = useState<ProjectInput>(defaultForm)
   const [techInput, setTechInput] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [reloadKey, setReloadKey] = useState(0)
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    let ignore = false
+    api.projects.list()
+      .then(data => { if (!ignore) setProjects(data) })
+      .catch((e) => { console.error(e) })
+      .finally(() => { if (!ignore) setLoading(false) })
+    return () => { ignore = true }
+  }, [reloadKey])
 
-  const load = async () => {
-    setLoading(true)
-    try { setProjects(await api.projects.list()) }
-    catch (e) { console.error(e) }
-    finally { setLoading(false) }
-  }
+  const load = () => setReloadKey(k => k + 1)
 
   const openCreate = () => {
     setEditing(null)
@@ -37,7 +40,7 @@ function ProjectsManager() {
     setEditing(p)
     setForm({
       name: p.name, description: p.description, challenges: p.challenges || '', outcome: p.outcome || '', year: p.year,
-      tech: [...p.tech], url: p.url, image: p.image,
+      tech: [...p.tech], url: p.url, image: p.image, github: p.github || '',
     })
     setTechInput('')
     setShowForm(true)
@@ -119,7 +122,12 @@ function ProjectsManager() {
                   <input value={form.url} onChange={e => setForm({ ...form, url: e.target.value })} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text text-sm" required />
                 </div>
                 <div>
-                  <label className="text-sm text-muted mb-1 block">Image</label>
+                  <label className="text-sm text-muted mb-1 block">GitHub URL</label>
+                  <input value={form.github ?? ''} onChange={e => setForm({ ...form, github: e.target.value })} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text text-sm" placeholder="https://github.com/..." />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-muted mb-1 block">Image</label>
                   <div className="flex items-start gap-3">
                     {form.image && (
                       <div className="w-16 h-16 rounded-lg overflow-hidden bg-background border border-border shrink-0">
@@ -145,7 +153,6 @@ function ProjectsManager() {
                     </div>
                   </div>
                 </div>
-              </div>
 
               <div>
                 <label className="text-sm text-muted mb-1 block">Technologies</label>
