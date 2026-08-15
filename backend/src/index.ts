@@ -63,6 +63,14 @@ app.use('/api/messages', messageRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/settings', settingsRoutes)
 
+app.get('/', (_req, res) => {
+  res.json({
+    service: 'myporfolio-api',
+    status: 'ok',
+    endpoints: ['/api/auth', '/api/projects', '/api/faq', '/api/skills', '/api/contact', '/api/messages', '/api/upload', '/api/settings', '/api/health'],
+  })
+})
+
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
 })
