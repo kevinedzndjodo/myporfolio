@@ -20,8 +20,7 @@ function createTransporter() {
 export async function sendContactEmail(name: string, email: string, message: string): Promise<void> {
   const transporter = createTransporter()
   if (!transporter || !config.CONTACT_EMAIL) {
-    console.log('SMTP not configured — contact message not sent')
-    console.log({ name, email, message })
+    console.warn('SMTP not configured — contact message stored but email notification not sent')
     return
   }
 

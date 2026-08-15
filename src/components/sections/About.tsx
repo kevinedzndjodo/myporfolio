@@ -10,7 +10,7 @@ const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://lo
 function About() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
-  const [imageUrl, setImageUrl] = useState('/me.png')
+  const [imageUrl, setImageUrl] = useState('/me.webp')
 
   useEffect(() => {
     api.settings.get().then((s) => {
@@ -60,6 +60,11 @@ function About() {
         ref={imageRef}
         src={imageUrl.startsWith('/uploads/') ? `${API_BASE}${imageUrl}` : `${import.meta.env.BASE_URL}${imageUrl.replace(/^\//, '')}`}
         alt="Kevin, frontend developer"
+        width={800}
+        height={1067}
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
         className="w-full h-full object-contain grayscale hover:grayscale-0 transition-[filter] duration-500"
       />
 

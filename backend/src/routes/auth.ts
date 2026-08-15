@@ -1,12 +1,11 @@
 import { Router } from 'express'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '../db.js'
 import { verifyPassword } from '../lib/password.js'
 import { signToken } from '../lib/jwt.js'
 import { validate } from '../middleware/validate.js'
 
 const router = Router()
-const prisma = new PrismaClient()
 
 const loginSchema = z.object({
   email: z.string().email(),

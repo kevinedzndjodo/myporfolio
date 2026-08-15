@@ -1,11 +1,10 @@
 import { Router } from 'express'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '../db.js'
 import { validate } from '../middleware/validate.js'
 import { sendContactEmail } from '../lib/email.js'
 
 const router = Router()
-const prisma = new PrismaClient()
 
 const contactSchema = z.object({
   name: z.string().min(1).max(100),

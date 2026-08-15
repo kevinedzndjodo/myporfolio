@@ -32,11 +32,7 @@ const upload = multer({
 router.post('/', authMiddleware, (req, res) => {
   upload.single('file')(req, res, (err) => {
     if (err) {
-      if (err instanceof multer.MulterError) {
-        res.status(400).json({ error: err.message })
-      } else {
-        res.status(400).json({ error: err.message })
-      }
+      res.status(400).json({ error: err.message })
       return
     }
 

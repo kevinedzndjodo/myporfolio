@@ -1,5 +1,7 @@
 const API = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 
+const PUBLIC_TIMEOUT_MS = 4000
+
 export class ApiError extends Error {
   status: number
   constructor(message: string, status: number) {
@@ -18,15 +20,22 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     headers['Authorization'] = `Bearer ${token}`
   }
 
-  const res = await fetch(`${API}${path}`, { ...options, headers })
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), PUBLIC_TIMEOUT_MS)
 
-  if (res.status === 204) return undefined as T
+  try {
+    const res = await fetch(`${API}${path}`, { ...options, headers, signal: options.signal ?? controller.signal })
 
-  const data = await res.json()
-  if (!res.ok) {
-    throw new ApiError(data.error || 'Request failed', res.status)
+    if (res.status === 204) return undefined as T
+
+    const data = await res.json()
+    if (!res.ok) {
+      throw new ApiError(data.error || 'Request failed', res.status)
+    }
+    return data as T
+  } finally {
+    clearTimeout(timeout)
   }
-  return data as T
 }
 
 async function uploadFile(file: File): Promise<string> {

@@ -43,7 +43,11 @@ function FeaturedCard({ project }: { project: Project }) {
         <img
           src={projectImage(project)}
           alt={project.name}
-          loading="lazy"
+          width={1440}
+          height={900}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </a>
@@ -112,7 +116,10 @@ function ProjectCard({ project, onDetails }: { project: Project; onDetails: (p: 
         <img
           src={projectImage(project)}
           alt={project.name}
+          width={1200}
+          height={675}
           loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </a>
@@ -166,7 +173,15 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
       </div>
 
       <div className="overflow-hidden rounded-xl mb-5 aspect-video">
-        <img src={projectImage(project)} alt={project.name} className="w-full h-full object-cover" />
+        <img
+          src={projectImage(project)}
+          alt={project.name}
+          width={1200}
+          height={675}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover"
+        />
       </div>
 
       <p className="text-muted text-sm md:text-base">{project.description}</p>
