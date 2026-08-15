@@ -13,9 +13,11 @@ gsap.registerPlugin(ScrollTrigger)
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:4000'
 
 function projectImage(project: Project) {
-  return project.image.startsWith('/uploads/')
-    ? `${API_BASE}${project.image}`
-    : `${import.meta.env.BASE_URL}projects/${project.image}`
+  if (project.image.startsWith('/uploads/')) {
+    return `${API_BASE}${project.image}`
+  }
+  const name = project.image.replace(/\.(png|jpe?g|gif|webp)$/i, '') + '.webp'
+  return `${import.meta.env.BASE_URL}projects/${name}`
 }
 
 function TechChips({ tech }: { tech: string[] }) {

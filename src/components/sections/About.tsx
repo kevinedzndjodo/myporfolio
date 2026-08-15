@@ -14,7 +14,12 @@ function About() {
 
   useEffect(() => {
     api.settings.get().then((s) => {
-      if (s.about_image) setImageUrl(s.about_image)
+      if (!s.about_image) return
+      const raw = s.about_image
+      const normalized = raw.startsWith('/uploads/')
+        ? raw
+        : raw.replace(/\.(png|jpe?g|gif|webp)$/i, '') + '.webp'
+      setImageUrl(normalized)
     }).catch(() => {})
   }, [])
 
