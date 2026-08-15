@@ -25,6 +25,7 @@ model Project {
   url         String
   image       String
   github      String?
+  featured    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

@@ -78,11 +78,11 @@ export const api = {
 
 export interface Project {
   id: number; name: string; description: string; challenges: string | null; outcome: string | null; year: number | null
-  tech: string[]; url: string; image: string; github: string | null; createdAt: string; updatedAt: string
+  tech: string[]; url: string; image: string; github: string | null; featured: boolean; createdAt: string; updatedAt: string
 }
 export interface ProjectInput {
   name: string; description: string; challenges?: string | null; outcome?: string | null; year?: number | null
-  tech: string[]; url: string; image: string; github?: string | null
+  tech: string[]; url: string; image: string; github?: string | null; featured?: boolean
 }
 export interface FaqItem {
   id: number; question: string; answer: string

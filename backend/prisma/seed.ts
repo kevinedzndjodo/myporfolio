@@ -3,7 +3,20 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
-const PROJECTS = [
+interface SeedProject {
+  name: string
+  description: string
+  challenges: string
+  outcome: string
+  year: number
+  tech: string[]
+  url: string
+  image: string
+  github: string
+  featured?: boolean
+}
+
+const PROJECTS: SeedProject[] = [
   {
     name: 'Streamly',
     description:
@@ -17,6 +30,7 @@ const PROJECTS = [
     url: 'https://streamly-frontend-three.vercel.app/',
     image: 'project-streamly.png',
     github: 'https://github.com/kevinedzndjodo/streamly',
+    featured: true,
   },
   {
     name: 'Shop Marketplace',
@@ -157,6 +171,7 @@ async function main() {
       url: project.url,
       image: project.image,
       github: project.github,
+      featured: project.featured ?? false,
     }
     await prisma.project.upsert({
       where: { name: project.name },

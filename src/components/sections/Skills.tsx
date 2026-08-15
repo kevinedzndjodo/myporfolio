@@ -61,8 +61,12 @@ function Skills() {
 
   return (
     <section className="px-6 md:px-12 py-12 md:py-20 bg-surface rounded-2xl flex flex-col gap-6 h-full">
-      <h3 className="text-muted text-sm md:text-base">Web Development</h3>
-        <p className='text-text'> I build modern, accessible web experiences with React, TypeScript, and Tailwind — from concept through to launch.</p>
+      <div>
+        <h2 className="text-2xl md:text-3xl font-semibold text-text">Tech I work with</h2>
+        <p className="text-muted text-sm md:text-base mt-2">
+          React, TypeScript and Tailwind at the core — plus the tools I reach for daily.
+        </p>
+      </div>
       <div className="w-full overflow-hidden">
         <LoadState
           loading={loading}

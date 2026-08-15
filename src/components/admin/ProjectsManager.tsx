@@ -3,7 +3,7 @@ import { api, type Project, type ProjectInput } from '../../lib/api'
 import { Plus, Pencil, Trash2, X, ImageUp } from 'lucide-react'
 
 const defaultForm: ProjectInput = {
-  name: '', description: '', challenges: '', outcome: '', year: null, tech: [], url: '', image: '', github: '',
+  name: '', description: '', challenges: '', outcome: '', year: null, tech: [], url: '', image: '', github: '', featured: false,
 }
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:4000'
@@ -40,7 +40,7 @@ function ProjectsManager() {
     setEditing(p)
     setForm({
       name: p.name, description: p.description, challenges: p.challenges || '', outcome: p.outcome || '', year: p.year,
-      tech: [...p.tech], url: p.url, image: p.image, github: p.github || '',
+      tech: [...p.tech], url: p.url, image: p.image, github: p.github || '', featured: p.featured,
     })
     setTechInput('')
     setShowForm(true)
@@ -98,6 +98,17 @@ function ProjectsManager() {
                 <div>
                   <label className="text-sm text-muted mb-1 block">Year</label>
                   <input type="number" value={form.year ?? ''} onChange={e => setForm({ ...form, year: e.target.value ? Number(e.target.value) : null })} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text text-sm" placeholder="e.g. 2024" />
+                </div>
+                <div className="flex items-end">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-muted py-2">
+                    <input
+                      type="checkbox"
+                      checked={form.featured}
+                      onChange={e => setForm({ ...form, featured: e.target.checked })}
+                      className="w-4 h-4 accent-accent"
+                    />
+                    Featured
+                  </label>
                 </div>
               </div>
 
@@ -187,6 +198,7 @@ function ProjectsManager() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-3">
                 <h4 className="text-text font-medium">{p.name}</h4>
+                {p.featured && <span className="text-xs text-accent border border-accent rounded-full px-2 py-0.5">Featured</span>}
                 {p.year && <span className="text-xs text-muted">{p.year}</span>}
               </div>
               <p className="text-muted text-sm mt-1 line-clamp-2">{p.description}</p>

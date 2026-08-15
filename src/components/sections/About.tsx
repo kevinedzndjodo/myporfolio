@@ -13,7 +13,7 @@ function About() {
   const [imageUrl, setImageUrl] = useState('/me.png')
 
   useEffect(() => {
-    api.settings.get().then(s => {
+    api.settings.get().then((s) => {
       if (s.about_image) setImageUrl(s.about_image)
     }).catch(() => {})
   }, [])
@@ -53,6 +53,7 @@ function About() {
 
   return () => mm.revert()
 }, [])
+
   return (
     <section ref={sectionRef} className="relative h-full min-h-100 lg:min-h-screen overflow-hidden lg:rounded-3xl">
       <img
@@ -62,13 +63,12 @@ function About() {
         className="w-full h-full object-contain grayscale hover:grayscale-0 transition-[filter] duration-500"
       />
 
-      <div className="lg:hidden absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-linear-to-t from-background via-background/80 to-transparent">
+      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-linear-to-t from-background via-background/80 to-transparent">
         <h2 className="text-lg md:text-2xl font-semibold text-text leading-snug">
           Hi, I'm Kevin — a frontend developer based in Yaoundé, Cameroon.
         </h2>
-
         <p className="text-muted text-sm mt-2 max-w-lg">
-          I build modern, accessible web experiences with React, TypeScript, and Tailwind.
+          I build modern, accessible web experiences with React, TypeScript and Tailwind — from concept through to launch.
         </p>
       </div>
     </section>
