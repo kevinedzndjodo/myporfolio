@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ExternalLink } from 'lucide-react'
 import { FaGithub } from 'react-icons/fa'
-import { api, CACHE_KEY, getCached, isValidRecentCache, type Project } from '../../lib/api'
+import { api, type Project } from '../../lib/api'
 import LoadState from './ui/LoadState'
 import Modal from './ui/Modal'
 
@@ -42,11 +42,7 @@ function FeaturedCard({ project }: { project: Project }) {
         <img
           src={projectImage(project)}
           alt={project.name}
-          loading="eager"
-          decoding="async"
-          fetchPriority="high"
-          width={1440}
-          height={900}
+          loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </a>
@@ -116,9 +112,6 @@ function ProjectCard({ project, onDetails }: { project: Project; onDetails: (p: 
           src={projectImage(project)}
           alt={project.name}
           loading="lazy"
-          decoding="async"
-          width={1200}
-          height={675}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </a>
@@ -250,8 +243,8 @@ function Skeleton() {
 
 function Projects() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [projects, setProjects] = useState<Project[]>(() => getCached(CACHE_KEY.projects) ?? [])
-  const [loading, setLoading] = useState(() => !isValidRecentCache(CACHE_KEY.projects))
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [detail, setDetail] = useState<Project | null>(null)
@@ -260,13 +253,10 @@ function Projects() {
     let ignore = false
     api.projects.list()
       .then((data) => {
-        if (!ignore) {
-          setProjects(data)
-          setError(null)
-        }
+        if (!ignore) setProjects(data)
       })
       .catch(() => {
-        if (!ignore && projects.length === 0) setError('Could not load projects. The API may be offline.')
+        if (!ignore) setError('Could not load projects. The API may be offline.')
       })
       .finally(() => {
         if (!ignore) setLoading(false)

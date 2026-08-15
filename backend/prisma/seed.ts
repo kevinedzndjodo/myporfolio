@@ -28,7 +28,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['React', 'Node.js', 'PostgreSQL', 'Tailwind', 'Express'],
     url: 'https://streamly-frontend-three.vercel.app/',
-    image: 'project-streamly.webp',
+    image: 'project-streamly.png',
     github: 'https://github.com/kevinedzndjodo/streamly',
     featured: true,
   },
@@ -43,7 +43,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['React', 'Vite', 'Tailwind', 'React Router'],
     url: 'https://kevinedzndjodo.github.io/e-commerce-goodclothes/',
-    image: 'shop-marketplace.webp',
+    image: 'shop-marketplace.png',
     github: 'https://github.com/kevinedzndjodo/e-commerce-goodclothes',
   },
   {
@@ -57,7 +57,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['React', 'Context API', 'Tailwind'],
     url: 'https://kevinedzndjodo.github.io/expense-tracker/',
-    image: 'expense-tracker.webp',
+    image: 'expense-tracker.png',
     github: 'https://github.com/kevinedzndjodo/expense-tracker',
   },
   {
@@ -71,7 +71,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['Vue 3', 'Vite', 'JavaScript'],
     url: 'https://kevinedzndjodo.github.io/todo-vue/',
-    image: 'todo-vue.webp',
+    image: 'todo-vue.png',
     github: 'https://github.com/kevinedzndjodo/todo-vue',
   },
   {
@@ -85,7 +85,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['HTML', 'CSS', 'JavaScript'],
     url: 'https://kevinedzndjodo.github.io/30days30projects/day-01-calculator/',
-    image: 'day-01-calculator.webp',
+    image: 'day-01-calculator.png',
     github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
   {
@@ -97,7 +97,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['HTML', 'CSS', 'JavaScript'],
     url: 'https://kevinedzndjodo.github.io/30days30projects/day-02-color-generator/',
-    image: 'day-02-color-generator.webp',
+    image: 'day-02-color-generator.png',
     github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
   {
@@ -109,7 +109,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['HTML', 'CSS', 'JavaScript'],
     url: 'https://kevinedzndjodo.github.io/30days30projects/day-03-digital-clock/',
-    image: 'day-03-digital-clock.webp',
+    image: 'day-03-digital-clock.png',
     github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
   {
@@ -121,7 +121,7 @@ const PROJECTS: SeedProject[] = [
     year: 2026,
     tech: ['HTML', 'CSS', 'JavaScript'],
     url: 'https://kevinedzndjodo.github.io/30days30projects/day-04-counter-app/',
-    image: 'day-04-counter-app.webp',
+    image: 'day-04-counter-app.png',
     github: 'https://github.com/kevinedzndjodo/30days30projects',
   },
 ]
@@ -153,7 +153,7 @@ async function main() {
   if (existingSettings === 0) {
     await prisma.setting.createMany({
       data: [
-        { key: 'about_image', value: '/me.webp' },
+        { key: 'about_image', value: '/me.png' },
         { key: 'site_title', value: 'Kevin Edza — Frontend Developer' },
       ],
     })

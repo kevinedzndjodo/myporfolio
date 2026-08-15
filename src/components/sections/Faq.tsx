@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { api, CACHE_KEY, getCached, isValidRecentCache, type FaqItem as FaqItemType } from '../../lib/api'
+import { api, type FaqItem as FaqItemType } from '../../lib/api'
 import LoadState from './ui/LoadState'
 
 function Faq() {
-  const [items, setItems] = useState<FaqItemType[]>(() => getCached(CACHE_KEY.faq) ?? [])
-  const [loading, setLoading] = useState(() => !isValidRecentCache(CACHE_KEY.faq))
+  const [items, setItems] = useState<FaqItemType[]>([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -12,14 +12,11 @@ function Faq() {
   useEffect(() => {
     let ignore = false
     api.faq.list()
-      .then((data) => {
-        if (!ignore) {
-          setItems(data)
-          setError(null)
-        }
+      .then(data => {
+        if (!ignore) setItems(data)
       })
       .catch(() => {
-        if (!ignore && items.length === 0) setError('Could not load the FAQ.')
+        if (!ignore) setError('Could not load the FAQ.')
       })
       .finally(() => {
         if (!ignore) setLoading(false)

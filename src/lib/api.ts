@@ -1,64 +1,5 @@
 const API = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 
-const CACHE_TTL = 1000 * 60 * 30 // 30 minutes
-const CACHE_PREFIX = 'portfolio-cache:'
-
-interface CacheEntry<T> {
-  data: T
-  updatedAt: number
-}
-
-function cacheKey(path: string): string {
-  return `${CACHE_PREFIX}${path}`
-}
-
-function readCache<T>(path: string): CacheEntry<T> | null {
-  try {
-    const raw = localStorage.getItem(cacheKey(path))
-    if (!raw) return null
-    const entry = JSON.parse(raw) as CacheEntry<T>
-    if (typeof entry?.updatedAt !== 'number' || entry.data === undefined) return null
-    return entry
-  } catch {
-    return null
-  }
-}
-
-function writeCache<T>(path: string, data: T): void {
-  try {
-    localStorage.setItem(cacheKey(path), JSON.stringify({ data, updatedAt: Date.now() } as CacheEntry<T>))
-  } catch {
-    /* storage full or unavailable — ignore */
-  }
-}
-
-function isFresh(entry: { updatedAt: number }): boolean {
-  return Date.now() - entry.updatedAt < CACHE_TTL
-}
-
-export const CACHE_KEY = {
-  projects: '/projects',
-  skills: '/skills',
-  faq: '/faq',
-} as const
-
-export function getCached<T>(path: string): T | null {
-  return readCache<T>(path)?.data ?? null
-}
-
-export function isValidRecentCache(path: string): boolean {
-  const entry = readCache<unknown>(path)
-  return !!entry && isFresh(entry)
-}
-
-export function invalidateCache(path: string): void {
-  try {
-    localStorage.removeItem(cacheKey(path))
-  } catch {
-    /* ignore */
-  }
-}
-
 export class ApiError extends Error {
   status: number
   constructor(message: string, status: number) {
@@ -88,28 +29,6 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return data as T
 }
 
-async function cachedGet<T>(path: string): Promise<T> {
-  const cached = readCache<T>(path)
-
-  if (cached && isFresh(cached)) {
-    setTimeout(() => {
-      request<T>(path)
-        .then((data) => writeCache(path, data))
-        .catch(() => {})
-    }, 0)
-    return cached.data as T
-  }
-
-  try {
-    const data = await request<T>(path)
-    writeCache(path, data)
-    return data
-  } catch (err) {
-    if (cached) return cached.data as T
-    throw err
-  }
-}
-
 async function uploadFile(file: File): Promise<string> {
   const token = localStorage.getItem('admin_token')
   const formData = new FormData()
@@ -128,19 +47,19 @@ async function uploadFile(file: File): Promise<string> {
 export const api = {
   upload: uploadFile,
   projects: {
-    list: () => cachedGet<Project[]>('/projects'),
+    list: () => request<Project[]>('/projects'),
     create: (data: ProjectInput) => request<Project>('/projects', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: ProjectInput) => request<Project>(`/projects/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => request<void>(`/projects/${id}`, { method: 'DELETE' }),
   },
   faq: {
-    list: () => cachedGet<FaqItem[]>('/faq'),
+    list: () => request<FaqItem[]>('/faq'),
     create: (data: FaqInput) => request<FaqItem>('/faq', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: FaqInput) => request<FaqItem>(`/faq/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => request<void>(`/faq/${id}`, { method: 'DELETE' }),
   },
   skills: {
-    list: () => cachedGet<Skill[]>('/skills'),
+    list: () => request<Skill[]>('/skills'),
     create: (data: SkillInput) => request<Skill>('/skills', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: SkillInput) => request<Skill>(`/skills/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => request<void>(`/skills/${id}`, { method: 'DELETE' }),

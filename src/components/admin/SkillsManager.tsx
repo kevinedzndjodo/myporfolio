@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { api, CACHE_KEY, invalidateCache, type Skill, type SkillInput } from '../../lib/api'
+import { api, type Skill, type SkillInput } from '../../lib/api'
 import { Plus, Pencil, Trash2, X } from 'lucide-react'
 
 function SkillsManager() {
@@ -34,14 +34,13 @@ function SkillsManager() {
     try {
       if (editing) await api.skills.update(editing.id, form)
       else await api.skills.create(form)
-      invalidateCache(CACHE_KEY.skills)
       setShowForm(false); load()
     } catch (e) { console.error(e) }
   }
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this skill?')) return
-    try { await api.skills.delete(id); invalidateCache(CACHE_KEY.skills); load() }
+    try { await api.skills.delete(id); load() }
     catch (e) { console.error(e) }
   }
 
