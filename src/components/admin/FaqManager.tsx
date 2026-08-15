@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { api, type FaqItem, type FaqInput } from '../../lib/api'
+import { api, CACHE_KEY, invalidateCache, type FaqItem, type FaqInput } from '../../lib/api'
 import { Plus, Pencil, Trash2, X } from 'lucide-react'
 
 function FaqManager() {
@@ -34,13 +34,14 @@ function FaqManager() {
     try {
       if (editing) await api.faq.update(editing.id, form)
       else await api.faq.create(form)
+      invalidateCache(CACHE_KEY.faq)
       setShowForm(false); load()
     } catch (e) { console.error(e) }
   }
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this FAQ item?')) return
-    try { await api.faq.delete(id); load() }
+    try { await api.faq.delete(id); invalidateCache(CACHE_KEY.faq); load() }
     catch (e) { console.error(e) }
   }
 

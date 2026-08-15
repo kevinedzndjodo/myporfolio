@@ -1,13 +1,13 @@
 import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
-import { api, type Skill as SkillType } from '../../lib/api'
+import { api, CACHE_KEY, getCached, isValidRecentCache, type Skill as SkillType } from '../../lib/api'
 import { getIcon } from '../../lib/icons'
 import Clock from './ui/Clock'
 import LoadState from './ui/LoadState'
 
 function Skills() {
-  const [skills, setSkills] = useState<SkillType[]>([])
-  const [loading, setLoading] = useState(true)
+  const [skills, setSkills] = useState<SkillType[]>(() => getCached<SkillType[]>(CACHE_KEY.skills) ?? [])
+  const [loading, setLoading] = useState(() => !isValidRecentCache(CACHE_KEY.skills))
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -16,11 +16,14 @@ function Skills() {
   useEffect(() => {
     let ignore = false
     api.skills.list()
-      .then(data => {
-        if (!ignore) setSkills(data)
+      .then((data) => {
+        if (!ignore) {
+          setSkills(data)
+          setError(null)
+        }
       })
       .catch(() => {
-        if (!ignore) setError('Could not load skills.')
+        if (!ignore && skills.length === 0) setError('Could not load skills.')
       })
       .finally(() => {
         if (!ignore) setLoading(false)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { api, type Project, type ProjectInput } from '../../lib/api'
+import { api, CACHE_KEY, invalidateCache, type Project, type ProjectInput } from '../../lib/api'
 import { Plus, Pencil, Trash2, X, ImageUp } from 'lucide-react'
 
 const defaultForm: ProjectInput = {
@@ -59,6 +59,7 @@ function ProjectsManager() {
     try {
       if (editing) await api.projects.update(editing.id, form)
       else await api.projects.create(form)
+      invalidateCache(CACHE_KEY.projects)
       setShowForm(false)
       load()
     } catch (e) { console.error(e) }
@@ -66,7 +67,7 @@ function ProjectsManager() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this project?')) return
-    try { await api.projects.delete(id); load() }
+    try { await api.projects.delete(id); invalidateCache(CACHE_KEY.projects); load() }
     catch (e) { console.error(e) }
   }
 
