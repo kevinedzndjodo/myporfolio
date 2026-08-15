@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { api, type FaqItem as FaqItemType } from '../../lib/api'
+import { FALLBACK_FAQ } from '../../data/content'
 import LoadState from './ui/LoadState'
 
 function Faq() {
-  const [items, setItems] = useState<FaqItemType[]>([])
-  const [loading, setLoading] = useState(true)
+  const [items, setItems] = useState<FaqItemType[]>(FALLBACK_FAQ)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -13,10 +14,10 @@ function Faq() {
     let ignore = false
     api.faq.list()
       .then(data => {
-        if (!ignore) setItems(data)
+        if (!ignore && Array.isArray(data) && data.length > 0) setItems(data)
       })
       .catch(() => {
-        if (!ignore) setError('Could not load the FAQ.')
+        if (!ignore) setError('Could not refresh the FAQ. Showing saved content.')
       })
       .finally(() => {
         if (!ignore) setLoading(false)

@@ -1,13 +1,14 @@
 import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { api, type Skill as SkillType } from '../../lib/api'
+import { FALLBACK_SKILLS } from '../../data/content'
 import { getIcon } from '../../lib/icons'
 import Clock from './ui/Clock'
 import LoadState from './ui/LoadState'
 
 function Skills() {
-  const [skills, setSkills] = useState<SkillType[]>([])
-  const [loading, setLoading] = useState(true)
+  const [skills, setSkills] = useState<SkillType[]>(FALLBACK_SKILLS)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -17,10 +18,10 @@ function Skills() {
     let ignore = false
     api.skills.list()
       .then(data => {
-        if (!ignore) setSkills(data)
+        if (!ignore && Array.isArray(data) && data.length > 0) setSkills(data)
       })
       .catch(() => {
-        if (!ignore) setError('Could not load skills.')
+        if (!ignore) setError('Could not refresh skills. Showing saved content.')
       })
       .finally(() => {
         if (!ignore) setLoading(false)

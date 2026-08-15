@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ExternalLink } from 'lucide-react'
 import { FaGithub } from 'react-icons/fa'
 import { api, type Project } from '../../lib/api'
+import { FALLBACK_PROJECTS_AS_PROJECTS } from '../../data/content'
 import LoadState from './ui/LoadState'
 import Modal from './ui/Modal'
 
@@ -243,8 +244,8 @@ function Skeleton() {
 
 function Projects() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
+  const [projects, setProjects] = useState<Project[]>(FALLBACK_PROJECTS_AS_PROJECTS)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [detail, setDetail] = useState<Project | null>(null)
@@ -253,10 +254,10 @@ function Projects() {
     let ignore = false
     api.projects.list()
       .then((data) => {
-        if (!ignore) setProjects(data)
+        if (!ignore && Array.isArray(data) && data.length > 0) setProjects(data)
       })
       .catch(() => {
-        if (!ignore) setError('Could not load projects. The API may be offline.')
+        if (!ignore) setError('Could not refresh projects. Showing saved content.')
       })
       .finally(() => {
         if (!ignore) setLoading(false)
