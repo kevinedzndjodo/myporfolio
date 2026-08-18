@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Home, User, FolderOpen, Mail } from 'lucide-react'
+import { Home, User, FolderOpen, Mail, Languages } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import type { TranslationKey } from '../i18n/translations'
 
@@ -11,7 +11,7 @@ const navItems = [
 ] as const
 
 function BottomNav() {
-  const { t } = useLanguage()
+  const { lang, toggleLang, t } = useLanguage()
   const [active, setActive] = useState('#home')
 
   useEffect(() => {
@@ -55,6 +55,14 @@ function BottomNav() {
             </a>
           )
         })}
+        <button
+          onClick={toggleLang}
+          aria-label={t('toggle.language')}
+          className="flex flex-col items-center gap-0.5 transition-colors text-[10px] text-muted hover:text-accent cursor-pointer"
+        >
+          <Languages size={20} />
+          {lang === 'en' ? 'FR' : 'EN'}
+        </button>
       </div>
     </nav>
   )
