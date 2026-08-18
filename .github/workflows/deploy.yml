@@ -34,7 +34,7 @@ jobs:
 
       - name: Smoke test the built bundle
         run: |
-          node -e "const fs=require('fs');const html=fs.readFileSync('dist/index.html','utf8');const m=html.match(/src=\"(\/myporfolio\/assets\/[^\"]+\.js)\"/);if(!m)throw new Error('No JS bundle found in dist/index.html');const js=fs.readFileSync('.'+m[1],'utf8');if(!js.includes('data/content'))console.log('WARN: fallback content may be missing');console.log('Bundle found:',m[1],'('+(js.length/1024).toFixed(1)+' KiB)');"
+          node -e "const fs=require('fs');const html=fs.readFileSync('dist/index.html','utf8');const m=html.match(/src=\"(\/[^\"]+\.js)\"/);if(!m)throw new Error('No JS bundle found in dist/index.html');const p='dist'+m[1].replace(/^\/myporfolio/,'');const js=fs.readFileSync(p,'utf8');if(!js.includes('Streamly'))console.log('WARN: fallback content may be missing');console.log('Bundle found:',m[1],'('+(js.length/1024).toFixed(1)+' KiB)');"
 
       - uses: actions/configure-pages@v5
 
