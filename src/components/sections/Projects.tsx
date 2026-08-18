@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ExternalLink } from 'lucide-react'
 import { FaGithub } from 'react-icons/fa'
 import { api, type Project } from '../../lib/api'
-import { fallbackProjects } from '../../data/content'
+import { fallbackProjects, translateProject } from '../../data/content'
 import { useLanguage } from '../../context/LanguageContext'
 import LoadState from './ui/LoadState'
 import Modal from './ui/Modal'
@@ -304,6 +304,8 @@ function Projects() {
 
   const featured = projects.find((p) => p.featured) ?? null
   const rest = featured ? projects.filter((p) => p.id !== featured.id) : projects
+  const featuredLocalized = featured ? translateProject(featured, lang) : null
+  const restLocalized = rest.map((p) => translateProject(p, lang))
 
   useEffect(() => {
     if (loading || failed) return
@@ -359,21 +361,21 @@ function Projects() {
         empty={<p className="text-muted text-sm">{t('projects.empty')}</p>}
       />
 
-      {featured && (
+      {featuredLocalized && (
         <div className="mb-8">
-          <FeaturedCard project={featured} />
+          <FeaturedCard project={featuredLocalized} />
         </div>
       )}
 
-      {rest.length > 0 && (
+      {restLocalized.length > 0 && (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {rest.map((project) => (
+          {restLocalized.map((project) => (
             <ProjectCard key={project.id} project={project} onDetails={setDetail} />
           ))}
         </div>
       )}
 
-      <ProjectModal project={detail} onClose={() => setDetail(null)} />
+      <ProjectModal project={detail ? translateProject(detail, lang) : null} onClose={() => setDetail(null)} />
     </section>
   )
 }

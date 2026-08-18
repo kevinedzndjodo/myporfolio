@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { api, type FaqItem as FaqItemType } from '../../lib/api'
-import { fallbackFaq } from '../../data/content'
+import { fallbackFaq, translateFaqItem } from '../../data/content'
 import { useLanguage } from '../../context/LanguageContext'
 import LoadState from './ui/LoadState'
 
@@ -69,6 +69,7 @@ function Faq() {
 
       <div className="flex flex-col divide-y divide-border border-t border-b border-border">
         {items.map((item, index) => {
+          const localized = translateFaqItem(item, lang)
           const isOpen = openIndex === index
 
           return (
@@ -79,7 +80,7 @@ function Faq() {
                 className="w-full flex items-center justify-between py-5 text-left"
               >
                 <span className="text-text text-base md:text-lg font-medium">
-                  {item.question}
+                  {localized.question}
                 </span>
                 <span className={`text-accent text-xl transition-transform duration-300 ${isOpen ? 'rotate-45' : 'rotate-0'}`}>
                   +
@@ -92,7 +93,7 @@ function Faq() {
               >
                 <div className="overflow-hidden">
                   <p className="text-muted text-sm md:text-base pb-5 max-w-2xl">
-                    {item.answer}
+                    {localized.answer}
                   </p>
                 </div>
               </div>

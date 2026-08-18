@@ -311,6 +311,25 @@ export function fallbackFaq(lang: Lang): FaqItem[] {
   return lang === 'fr' ? FALLBACK_FAQ_FR : FALLBACK_FAQ
 }
 
+export function translateFaqItem(item: FaqItem, lang: Lang): FaqItem {
+  if (lang !== 'fr') return item
+  const fr = FALLBACK_FAQ_FR.find((f) => f.id === item.id)
+  if (!fr) return item
+  return { ...item, question: fr.question, answer: fr.answer }
+}
+
+export function translateProject(project: Project, lang: Lang): Project {
+  if (lang !== 'fr') return project
+  const fr = FALLBACK_PROJECTS_FR.find((p) => p.name === project.name)
+  if (!fr) return project
+  return {
+    ...project,
+    description: fr.description,
+    challenges: fr.challenges,
+    outcome: fr.outcome,
+  }
+}
+
 export const FALLBACK_SKILLS: Skill[] = [
   'HTML', 'CSS', 'JavaScript', 'React', 'TypeScript', 'Tailwind', 'Vite', 'GSAP', 'Git',
 ].map((name, i) => {
