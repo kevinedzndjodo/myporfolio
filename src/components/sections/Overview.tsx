@@ -1,21 +1,24 @@
 import Button from './ui/Button'
-
-const highlights = [
-  { title: 'Frontend first', text: 'React, TypeScript, Tailwind — shipped on time.' },
-  { title: 'Accessible & fast', text: 'Keyboard-friendly, reduced-motion aware, performant.' },
-  { title: 'Concept to launch', text: 'From first conversation to live deployment.' },
-]
+import { useLanguage } from '../../context/LanguageContext'
 
 function Overview() {
+  const { t } = useLanguage()
+
+  const highlights = [
+    { title: t('overview.highlight1.title'), text: t('overview.highlight1.text') },
+    { title: t('overview.highlight2.title'), text: t('overview.highlight2.text') },
+    { title: t('overview.highlight3.title'), text: t('overview.highlight3.text') },
+  ]
+
   return (
     <section id="overview" className="px-6 md:px-12 py-12 md:py-20 bg-surface rounded-2xl flex flex-col gap-8 justify-between h-full">
       <div>
         <h2 className="text-2xl md:text-3xl font-semibold text-text leading-snug">
-          Frontend developer experienced in taking ideas from concept to launch.
+          {t('overview.title')}
         </h2>
 
         <p className="text-muted text-sm md:text-base max-w-lg mt-6">
-          I build modern, accessible web experiences with React, TypeScript and Tailwind. If you're starting a new web project, let's talk about what you need.
+          {t('overview.text')}
         </p>
       </div>
 
@@ -30,8 +33,8 @@ function Overview() {
         </ul>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="#contact">Say hello</Button>
-          <Button href="#projects" variant="secondary" external={false}>See my work</Button>
+          <Button href="#contact">{t('overview.hello')}</Button>
+          <Button href="#projects" variant="secondary" external={false}>{t('overview.work')}</Button>
         </div>
       </div>
     </section>

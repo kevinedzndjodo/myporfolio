@@ -1,15 +1,15 @@
 import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLanguage } from '../../context/LanguageContext'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const strategyText =
-  "My approach is simple: understand the problem deeply, design with intention, and build with care. Every project starts with real conversations, not templates, so the end result actually fits what you need, not a generic mold."
 
 function Strategy() {
   const containerRef = useRef<HTMLParagraphElement>(null)
   const tlRef = useRef<gsap.core.Tween | null>(null)
+  const { t } = useLanguage()
+  const strategyText = t('strategy.text')
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -32,7 +32,7 @@ function Strategy() {
       )
     }, containerRef)
     return () => { ctx.revert(); tlRef.current = null }
-  }, [])
+  }, [strategyText])
 
   return (
     <section id="strategy" className="px-4 md:px-16 py-16 md:py-24 bg-background">

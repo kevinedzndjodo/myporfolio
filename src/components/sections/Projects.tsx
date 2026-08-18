@@ -4,7 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ExternalLink } from 'lucide-react'
 import { FaGithub } from 'react-icons/fa'
 import { api, type Project } from '../../lib/api'
-import { FALLBACK_PROJECTS_AS_PROJECTS } from '../../data/content'
+import { fallbackProjects } from '../../data/content'
+import { useLanguage } from '../../context/LanguageContext'
 import LoadState from './ui/LoadState'
 import Modal from './ui/Modal'
 
@@ -33,6 +34,7 @@ function TechChips({ tech }: { tech: string[] }) {
 }
 
 function FeaturedCard({ project }: { project: Project }) {
+  const { t } = useLanguage()
   return (
     <article className="project-card grid md:grid-cols-2 gap-6 md:gap-10 bg-surface rounded-2xl p-4 md:p-10">
       <a
@@ -40,7 +42,7 @@ function FeaturedCard({ project }: { project: Project }) {
         target="_blank"
         rel="noopener noreferrer"
         className="project-image overflow-hidden rounded-xl block md:min-h-[360px]"
-        aria-label={`Open ${project.name} (opens in a new tab)`}
+        aria-label={t('projects.openAria').replace('{name}', project.name)}
       >
         <img
           src={projectImage(project)}
@@ -56,7 +58,7 @@ function FeaturedCard({ project }: { project: Project }) {
 
       <div className="project-content flex flex-col">
         <div className="flex items-center gap-3">
-          <span className="text-[11px] uppercase tracking-widest text-accent font-medium">Featured</span>
+          <span className="text-[11px] uppercase tracking-widest text-accent font-medium">{t('projects.featured')}</span>
           {project.year && <span className="text-xs text-muted">{project.year}</span>}
         </div>
         <h3 className="text-2xl md:text-3xl font-semibold text-text mt-2">{project.name}</h3>
@@ -64,14 +66,14 @@ function FeaturedCard({ project }: { project: Project }) {
 
         {project.challenges && (
           <div className="mt-5">
-            <p className="text-xs text-accent font-medium uppercase tracking-wider">Challenges</p>
+            <p className="text-xs text-accent font-medium uppercase tracking-wider">{t('projects.challenges')}</p>
             <p className="text-muted text-sm mt-1">{project.challenges}</p>
           </div>
         )}
 
         {project.outcome && (
           <div className="mt-4">
-            <p className="text-xs text-accent font-medium uppercase tracking-wider">Outcome</p>
+            <p className="text-xs text-accent font-medium uppercase tracking-wider">{t('projects.outcome')}</p>
             <p className="text-muted text-sm mt-1">{project.outcome}</p>
           </div>
         )}
@@ -87,7 +89,7 @@ function FeaturedCard({ project }: { project: Project }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-accent text-background px-5 py-2.5 rounded-md font-medium text-sm hover:opacity-90 transition"
           >
-            Visit site <ExternalLink size={14} />
+            {t('projects.visit')} <ExternalLink size={14} />
           </a>
           {project.github && (
             <a
@@ -96,7 +98,7 @@ function FeaturedCard({ project }: { project: Project }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-text hover:text-accent transition text-sm"
             >
-              <FaGithub size={16} /> Source code
+              <FaGithub size={16} /> {t('projects.source')}
             </a>
           )}
         </div>
@@ -106,6 +108,7 @@ function FeaturedCard({ project }: { project: Project }) {
 }
 
 function ProjectCard({ project, onDetails }: { project: Project; onDetails: (p: Project) => void }) {
+  const { t } = useLanguage()
   return (
     <article className="project-card group bg-surface rounded-2xl p-4 md:p-5 flex flex-col">
       <a
@@ -113,7 +116,7 @@ function ProjectCard({ project, onDetails }: { project: Project; onDetails: (p: 
         target="_blank"
         rel="noopener noreferrer"
         className="project-image overflow-hidden rounded-xl block aspect-video"
-        aria-label={`Open ${project.name} (opens in a new tab)`}
+        aria-label={t('projects.openAria').replace('{name}', project.name)}
       >
         <img
           src={projectImage(project)}
@@ -144,13 +147,13 @@ function ProjectCard({ project, onDetails }: { project: Project; onDetails: (p: 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-accent text-background px-4 py-2 rounded-md font-medium text-sm hover:opacity-90 transition"
           >
-            Visit site
+            {t('projects.visit')}
           </a>
           <button
             onClick={() => onDetails(project)}
             className="text-sm text-muted hover:text-accent transition"
           >
-            Details
+            {t('projects.details')}
           </button>
         </div>
       </div>
@@ -159,17 +162,18 @@ function ProjectCard({ project, onDetails }: { project: Project; onDetails: (p: 
 }
 
 function ProjectModal({ project, onClose }: { project: Project | null; onClose: () => void }) {
+  const { t } = useLanguage()
   if (!project) return null
   return (
     <Modal open={!!project} onClose={onClose} labelledBy="project-detail-title">
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
-          <span className="text-[11px] uppercase tracking-widest text-accent font-medium">Project</span>
+          <span className="text-[11px] uppercase tracking-widest text-accent font-medium">{t('projects.project')}</span>
           <h3 id="project-detail-title" className="text-2xl font-semibold text-text mt-1">
             {project.name}
           </h3>
         </div>
-        <button onClick={onClose} aria-label="Close details" className="text-muted hover:text-text transition p-1">
+        <button onClick={onClose} aria-label={t('projects.close')} className="text-muted hover:text-text transition p-1">
           <span className="text-2xl leading-none">&times;</span>
         </button>
       </div>
@@ -190,14 +194,14 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
 
       {project.challenges && (
         <div className="mt-5">
-          <p className="text-xs text-accent font-medium uppercase tracking-wider">Challenges</p>
+          <p className="text-xs text-accent font-medium uppercase tracking-wider">{t('projects.challenges')}</p>
           <p className="text-muted text-sm mt-1">{project.challenges}</p>
         </div>
       )}
 
       {project.outcome && (
         <div className="mt-4">
-          <p className="text-xs text-accent font-medium uppercase tracking-wider">Outcome</p>
+          <p className="text-xs text-accent font-medium uppercase tracking-wider">{t('projects.outcome')}</p>
           <p className="text-muted text-sm mt-1">{project.outcome}</p>
         </div>
       )}
@@ -217,7 +221,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 bg-accent text-background px-5 py-2.5 rounded-md font-medium text-sm hover:opacity-90 transition"
         >
-          Visit site <ExternalLink size={14} />
+          {t('projects.visit')} <ExternalLink size={14} />
         </a>
         {project.github && (
           <a
@@ -226,7 +230,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-text hover:text-accent transition text-sm"
           >
-            <FaGithub size={16} /> Source code
+            <FaGithub size={16} /> {t('projects.source')}
           </a>
         )}
       </div>
@@ -261,20 +265,30 @@ function Skeleton() {
 
 function Projects() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [projects, setProjects] = useState<Project[]>(FALLBACK_PROJECTS_AS_PROJECTS)
+  const { lang, t } = useLanguage()
+  const [projects, setProjects] = useState<Project[]>(fallbackProjects(lang))
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [failed, setFailed] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
   const [detail, setDetail] = useState<Project | null>(null)
+  const serverLoadedRef = useRef(false)
+
+  useEffect(() => {
+    if (serverLoadedRef.current) return
+    setProjects(fallbackProjects(lang))
+  }, [lang])
 
   useEffect(() => {
     let ignore = false
     api.projects.list()
       .then((data) => {
-        if (!ignore && Array.isArray(data) && data.length > 0) setProjects(data)
+        if (!ignore && Array.isArray(data) && data.length > 0) {
+          serverLoadedRef.current = true
+          setProjects(data)
+        }
       })
       .catch(() => {
-        if (!ignore) setError('Could not refresh projects. Showing saved content.')
+        if (!ignore) setFailed(true)
       })
       .finally(() => {
         if (!ignore) setLoading(false)
@@ -284,7 +298,7 @@ function Projects() {
 
   const load = () => {
     setLoading(true)
-    setError(null)
+    setFailed(false)
     setReloadKey((k) => k + 1)
   }
 
@@ -292,7 +306,7 @@ function Projects() {
   const rest = featured ? projects.filter((p) => p.id !== featured.id) : projects
 
   useEffect(() => {
-    if (loading || error) return
+    if (loading || failed) return
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const cards = containerRef.current?.querySelectorAll('.project-card')
     if (!cards) return
@@ -330,19 +344,19 @@ function Projects() {
     }, containerRef)
 
     return () => ctx.revert()
-  }, [projects, loading, error])
+  }, [projects, loading, failed])
 
   return (
     <section id="projects" ref={containerRef} className="px-4 md:px-16 py-16 md:py-24 bg-background">
-      <h2 className="text-2xl md:text-4xl font-semibold text-text mb-10 md:mb-16">Projects</h2>
+      <h2 className="text-2xl md:text-4xl font-semibold text-text mb-10 md:mb-16">{t('projects.title')}</h2>
 
       <LoadState
         loading={loading}
-        error={error}
+        error={failed ? t('projects.error') : null}
         isEmpty={projects.length === 0}
         onRetry={load}
         skeleton={<Skeleton />}
-        empty={<p className="text-muted text-sm">No projects yet.</p>}
+        empty={<p className="text-muted text-sm">{t('projects.empty')}</p>}
       />
 
       {featured && (

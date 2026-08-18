@@ -1,4 +1,5 @@
 import { RefreshCw } from 'lucide-react'
+import { useLanguage } from '../../../context/LanguageContext'
 
 interface LoadStateProps {
   loading: boolean
@@ -10,6 +11,7 @@ interface LoadStateProps {
 }
 
 function LoadState({ loading, error, onRetry, skeleton, empty, isEmpty }: LoadStateProps) {
+  const { t } = useLanguage()
   if (loading) return <>{skeleton}</>
   if (error) {
     return (
@@ -19,7 +21,7 @@ function LoadState({ loading, error, onRetry, skeleton, empty, isEmpty }: LoadSt
           onClick={onRetry}
           className="inline-flex items-center gap-2 text-accent text-sm font-medium hover:underline"
         >
-          <RefreshCw size={14} /> Try again
+          <RefreshCw size={14} /> {t('loadstate.retry')}
         </button>
       </div>
     )

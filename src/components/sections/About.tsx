@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { api } from '../../lib/api'
+import { useLanguage } from '../../context/LanguageContext'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -11,6 +12,7 @@ function About() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   const [imageUrl, setImageUrl] = useState('/me.webp')
+  const { t } = useLanguage()
 
   useEffect(() => {
     api.settings.get().then((s) => {
@@ -64,7 +66,7 @@ function About() {
       <img
         ref={imageRef}
         src={imageUrl.startsWith('/uploads/') ? `${API_BASE}${imageUrl}` : `${import.meta.env.BASE_URL}${imageUrl.replace(/^\//, '')}`}
-        alt="Kevin, frontend developer"
+        alt={t('about.alt')}
         width={800}
         height={1067}
         loading="eager"
@@ -75,10 +77,10 @@ function About() {
 
       <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-linear-to-t from-background via-background/80 to-transparent">
         <h2 className="text-lg md:text-2xl font-semibold text-text leading-snug">
-          Hi, I'm Kevin — a frontend developer based in Yaoundé, Cameroon.
+          {t('about.title')}
         </h2>
         <p className="text-muted text-sm mt-2 max-w-lg">
-          I build modern, accessible web experiences with React, TypeScript and Tailwind — from concept through to launch.
+          {t('about.text')}
         </p>
       </div>
     </section>

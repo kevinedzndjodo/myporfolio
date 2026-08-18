@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Home, User, FolderOpen, Mail } from 'lucide-react'
+import { useLanguage } from '../context/LanguageContext'
+import type { TranslationKey } from '../i18n/translations'
 
 const navItems = [
-  { href: '#home', label: 'Home', icon: Home },
-  { href: '#overview', label: 'About', icon: User },
-  { href: '#projects', label: 'Projects', icon: FolderOpen },
-  { href: '#contact', label: 'Contact', icon: Mail },
-]
+  { href: '#home', label: 'nav.home', icon: Home },
+  { href: '#overview', label: 'nav.about', icon: User },
+  { href: '#projects', label: 'nav.projects', icon: FolderOpen },
+  { href: '#contact', label: 'nav.contact', icon: Mail },
+] as const
 
 function BottomNav() {
+  const { t } = useLanguage()
   const [active, setActive] = useState('#home')
 
   useEffect(() => {
@@ -48,7 +51,7 @@ function BottomNav() {
               }`}
             >
               <Icon size={20} />
-              {label}
+              {t(label as TranslationKey)}
             </a>
           )
         })}

@@ -3,13 +3,15 @@ import gsap from 'gsap'
 import { api, type Skill as SkillType } from '../../lib/api'
 import { FALLBACK_SKILLS } from '../../data/content'
 import { getIcon } from '../../lib/icons'
+import { useLanguage } from '../../context/LanguageContext'
 import Clock from './ui/Clock'
 import LoadState from './ui/LoadState'
 
 function Skills() {
+  const { t } = useLanguage()
   const [skills, setSkills] = useState<SkillType[]>(FALLBACK_SKILLS)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [failed, setFailed] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
   const trackRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<gsap.core.Tween | null>(null)
@@ -21,7 +23,7 @@ function Skills() {
         if (!ignore && Array.isArray(data) && data.length > 0) setSkills(data)
       })
       .catch(() => {
-        if (!ignore) setError('Could not refresh skills. Showing saved content.')
+        if (!ignore) setFailed(true)
       })
       .finally(() => {
         if (!ignore) setLoading(false)
@@ -31,7 +33,7 @@ function Skills() {
 
   const load = () => {
     setLoading(true)
-    setError(null)
+    setFailed(false)
     setReloadKey(k => k + 1)
   }
 
@@ -63,19 +65,19 @@ function Skills() {
   return (
     <section className="px-6 md:px-12 py-12 md:py-20 bg-surface rounded-2xl flex flex-col gap-6 h-full">
       <div>
-        <h2 className="text-2xl md:text-3xl font-semibold text-text">Tech I work with</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-text">{t('skills.title')}</h2>
         <p className="text-muted text-sm md:text-base mt-2">
-          React, TypeScript and Tailwind at the core — plus the tools I reach for daily.
+          {t('skills.text')}
         </p>
       </div>
       <div className="w-full overflow-hidden">
         <LoadState
           loading={loading}
-          error={error}
+          error={failed ? t('skills.error') : null}
           isEmpty={skills.length === 0}
           onRetry={load}
           skeleton={<div className="h-9 bg-border/40 rounded-full animate-pulse w-full" />}
-          empty={<p className="text-muted text-sm">No skills yet.</p>}
+          empty={<p className="text-muted text-sm">{t('skills.empty')}</p>}
         />
         <div
           ref={trackRef}
